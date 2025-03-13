@@ -50,19 +50,18 @@ export const AddEditOrder = () => {
     const handleRemoveProduct = (productId) => {
         setOrder(prevOrder => ({
             ...prevOrder,
-            orderLines: prevOrder.orderLines.filter(p => p.id !== productId)
+            orderLines: prevOrder.orderLines.filter(p => p.productId !== productId)
         }));
     };
 
     const handleSaveOrder = async () => {
-        if (order.orderNumber.trim() === '') {
+        if (isNaN(parseInt(order.orderNumber))) {
             setError(true);  
         } else {
             setError(false);  
             await saveOrder(order);
             navigate("/my-orders");
         }
-
     };
 
     const calculateFinalPrice = () => {
@@ -77,7 +76,7 @@ export const AddEditOrder = () => {
             <TextField label="Order #" value={order.orderNumber}
                 onChange={(e) => setOrder({ ...order, orderNumber: e.target.value })}
                 fullWidth margin="normal" />
-            {error && <Alert severity="error">El campo no puede estar vacío</Alert>}
+            {error && <Alert severity="error">El campo debe ser numérico</Alert>}
             <TextField label="Date" value={formatDate(order.date)} fullWidth margin="normal" disabled />
             <TextField label="# Products" value={order.orderLines.length} fullWidth margin="normal" disabled />
             <TextField label="Final Price" value={fieldValue} fullWidth margin="normal" disabled />
@@ -107,7 +106,7 @@ export const AddEditOrder = () => {
                                 <TableCell>${(product.price * product.quantity).toFixed(2)}</TableCell>
                                 <TableCell>
                                     <Button color="primary" onClick={() => handleEditProduct(product)}>Edit</Button>
-                                    <Button color="secondary" onClick={() => handleRemoveProduct(product.id)}>Remove</Button>
+                                    <Button color="secondary" onClick={() => handleRemoveProduct(product.productId)}>Remove</Button>
                                 </TableCell>
                             </TableRow>
                         ))}

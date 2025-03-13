@@ -23,7 +23,6 @@ export const fetchOrderById = async (id) => {
 
 export const saveOrder = async (order) => {
     try {
-        console.log(order);
         if (order.id) {
             await axios.put(`${API_URL}/orders/${order.id}`, order);
         } else {
