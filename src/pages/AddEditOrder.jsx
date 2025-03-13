@@ -65,6 +65,12 @@ export const AddEditOrder = () => {
 
     };
 
+    const calculateFinalPrice = () => {
+        return order.orderLines.reduce((sum, p) => sum + (p.price * p.quantity), 0).toFixed(2);
+      };
+
+    const fieldValue = isEditing ? (order.totalPrice || 0).toFixed(2) : calculateFinalPrice();
+
     return (
         <Container>
             <h2>{isEditing ? "Edit Order" : "Add Order"}</h2>
@@ -74,7 +80,7 @@ export const AddEditOrder = () => {
             {error && <Alert severity="error">El campo no puede estar vacío</Alert>}
             <TextField label="Date" value={formatDate(order.date)} fullWidth margin="normal" disabled />
             <TextField label="# Products" value={order.orderLines.length} fullWidth margin="normal" disabled />
-            <TextField label="Final Price" value={(order.orderLines.reduce((sum, p) => sum + (p.price * p.quantity), 0).toFixed(2))} fullWidth margin="normal" disabled />
+            <TextField label="Final Price" value={fieldValue} fullWidth margin="normal" disabled />
             <Button variant="contained" onClick={() => setOpenModal(true)}>Add Product</Button>
 
             <ProductModal open={openModal} onClose={() => setOpenModal(false)} onAddOrderLine={handleAddOrderLine} productToEdit={editProduct} />
